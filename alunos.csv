@@ -1,0 +1,4 @@
+id,nome,email,login,senha,nivel,turma_participante,tutor_responsavel,aulas_assistidas
+1,João Silva,joao.silva@example.com,joaosilva,senha123,Intermediário,Turma A,Maria Souza,5
+2,Ana Pereira,ana.pereira@example.com,anapereira,senha456,Avançado,Turma B,Carlos Silva,10
+3,Carlos Andrade,carlos.andrade@example.com,carlosandrade,senha789,Básico,Turma C,Juliana Melo,2
