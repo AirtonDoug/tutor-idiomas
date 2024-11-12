@@ -59,13 +59,13 @@ def create_aluno(aluno: Aluno):
 
 # Read Alunos
 
-@app.get("/alunos/", response_model=List[Aluno])
-def listar_alunos():
+@app.get("/alunos/")
+def listar_alunos() -> List[Aluno]:
     return alunos
 
 # Update Aluno
 
-@app.put("/alunos/{aluno_id}",response_model=Aluno)
+@app.put("/alunos/{aluno_id}")
 def atualizar_aluno(aluno_id: int, aluno: Aluno):
     for i, aluno_atual in enumerate(alunos):
         if aluno_atual.id == aluno_id:
@@ -76,7 +76,7 @@ def atualizar_aluno(aluno_id: int, aluno: Aluno):
 
 # Delete Aluno
 
-@app.delete("/alunos/{aluno_id}",response_model=Aluno)
+@app.delete("/alunos/{aluno_id}")
 def excluir_aluno(aluno_id: int, aluno: Aluno):
     for i, aluno_atual in enumerate(alunos):
         if aluno_atual.id == aluno_id:
