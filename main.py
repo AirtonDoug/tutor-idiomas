@@ -7,7 +7,6 @@ import csv
 app = FastAPI()
 
 
-
 # Carregar dados do arquivo CSV
 
 def load_alunos_from_csv() -> List[Aluno]:
