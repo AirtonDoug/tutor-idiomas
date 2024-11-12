@@ -44,8 +44,19 @@ def save_alunos_csv(alunos:List[Aluno]):
                 aluno.aulas_assistidas
             ])
 
-
+# carregar alunos do csv
 alunos = load_alunos_from_csv()
+
+# Contar entidades no csv
+
+def count_entities_csv(file_path: str) -> int:
+    try:
+        with open(file_path, mode="r") as file:
+            reader = csv.DictReader(file)
+            return sum(1 for row in reader)
+    except FileNotFoundError:
+        return 0
+
 
 # Create Aluno
 @app.post("/alunos/")
@@ -84,3 +95,9 @@ def excluir_aluno(aluno_id: int, aluno: Aluno):
             save_alunos_csv(alunos)
             return aluno
     raise HTTPException(status_code=404, detail="Aluno não encontrado")
+
+# Count Alunos
+
+@app.get("/alunos/count")
+def contar_alunos():
+    return count_entities_csv("alunos.csv")
