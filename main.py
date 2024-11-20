@@ -1,8 +1,15 @@
+import os
+import zipfile
 from fastapi import FastAPI, HTTPException
 from typing import List , Union
 from http import HTTPStatus
+
+from fastapi.responses import FileResponse
 from models import Aluno
 import csv
+
+CSV_FILE_PATH = "alunos.csv"
+ZIP_FILE_PATH = "alunos.zip"
 
 app = FastAPI()
 
@@ -100,3 +107,23 @@ def excluir_aluno(aluno_id: int, aluno: Aluno):
 @app.get("/alunos/count")
 def contar_alunos():
     return count_entities_csv("alunos.csv")
+
+@app.post("/compactar_csv/")
+def compactar_csv():
+    """
+    Compacta o arquivo CSV em um arquivo ZIP e o retorna.
+    """
+    # Verifica se o arquivo CSV existe
+    if not os.path.exists(CSV_FILE_PATH):
+        return {"error": "Arquivo CSV não encontrado"}
+
+    # Cria o arquivo ZIP
+    with zipfile.ZipFile(ZIP_FILE_PATH, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        zipf.write(CSV_FILE_PATH, arcname=os.path.basename(CSV_FILE_PATH))
+
+    # Retorna o arquivo ZIP
+    return FileResponse(
+        ZIP_FILE_PATH,
+        media_type="application/zip",
+        filename=os.path.basename(ZIP_FILE_PATH)
+    )
