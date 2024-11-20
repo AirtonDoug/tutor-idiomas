@@ -1,1 +1,2 @@
-id,nome,email,login,senha,nivel,turmas,alunos_id,idiomas
+id,nome,email,login,senha,nivel,turmas,tutores_id,idiomas
+1,vinicius,Vinicius@gmail.com,mvinicius,123456,string,A,"0, 1",Ingles

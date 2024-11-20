@@ -1,4 +1,6 @@
+from typing import List, Optional
 from pydantic import BaseModel
+from typing import List, Optional
 
 class Aluno(BaseModel):
     id: int
@@ -18,6 +20,6 @@ class Tutor(BaseModel):
     login: str
     senha: str
     nivel: str
-    turmas_responsavel: list[str] = []
-    alunos_id: list[int] = []
-    idiomas: list[str] = []
+    turmas_ministradas: List[str]
+    tutores_responsavel: Optional[List[int]] = None
+    idiomas_ministrados: List[str]
