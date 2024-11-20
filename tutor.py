@@ -35,8 +35,11 @@ def load_tutores_from_csv() -> List[Tutor]:
         pass
     return tutores
 
-#Salva um tutor no arquivo CSV
+
 def save_tutores_csv(tutores: List[Tutor]):
+    """
+    Salva um tutor no arquivo CSV
+    """
     with open("tutores.csv", mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["id", "nome", "email", "login", "senha", "nivel", "turmas", "tutores_id", "idiomas"])
@@ -50,15 +53,18 @@ def save_tutores_csv(tutores: List[Tutor]):
 #carrega o CSV de tutores
 tutores = load_tutores_from_csv()
 
-#conta a quantidade de entidades de um CSV
+
 def count_entities_csv(file_path: str) -> int:
+    """
+    conta a quantidade de entidades de um CSV
+    """
     try:
         with open(file_path, mode="r") as file:
             reader = csv.DictReader(file)
             return sum(1 for row in reader)
     except FileNotFoundError:
         return 0
-#Função para calcular o hash sha256
+
 def calcular_hash_sha256(file_path: str) -> str:
     """
     Calcula o hash SHA256 de um arquivo.
@@ -72,9 +78,12 @@ def calcular_hash_sha256(file_path: str) -> str:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Arquivo CSV não encontrado")
 
-#criar e adicionar o novo tutor
+
 @app.post("/tutores/")
 def create_tutor(tutor: Tutor):
+    """
+    criar e adicionar o novo tutor
+    """
     if any(tutor_atual.id == tutor.id for tutor_atual in tutores):
         raise HTTPException(status_code=400, detail="ID já existente")
     tutores.append(tutor)
@@ -85,9 +94,12 @@ def create_tutor(tutor: Tutor):
 def listar_tutores() -> List[Tutor]:
     return tutores
 
-#Atualizar um tutor passando um ID
+
 @app.put("/tutores/{tutor_id}")
 def atualizar_tutor(tutor_id: int, tutor: Tutor):
+    """
+    Atualizar um tutor passando um ID
+    """
     for i, tutor_atual in enumerate(tutores):
         if tutor_atual.id == tutor_id:
             tutores[i] = tutor
@@ -95,9 +107,12 @@ def atualizar_tutor(tutor_id: int, tutor: Tutor):
             return tutor
     raise HTTPException(status_code=404, detail="Tutor não encontrado")
 
-#Deletar um tutor passando o ID
+
 @app.delete("/tutores/{tutor_id}")
 def excluir_tutor(tutor_id: int):
+    """
+    Deletar um tutor passando o ID
+    """
     for i, tutor_atual in enumerate(tutores):
         if tutor_atual.id == tutor_id:
             del tutores[i]
@@ -105,12 +120,15 @@ def excluir_tutor(tutor_id: int):
             return {"message": "Tutor excluído com sucesso"}
     raise HTTPException(status_code=404, detail="Tutor não encontrado")
 
-#retornar a quantidade de entidades do arquivo CSV
+
 @app.get("/tutores/count")
 def contar_alunos():
+    """
+    retornar a quantidade de entidades do arquivo CSV
+    """
     return count_entities_csv("tutores.csv")
 
-#compactar um arquivo CSV
+
 @app.post("/compactar_csv/")
 def compactar_csv():
     """
@@ -131,7 +149,7 @@ def compactar_csv():
         filename=os.path.basename(ZIP_FILE_PATH)
     )
 
-#endpoint que retorna o hash sha256 de um arquivo CSV  
+ 
 @app.get("/hash_csv/")
 def obter_hash_csv():
     """
