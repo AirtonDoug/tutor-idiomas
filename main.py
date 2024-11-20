@@ -1,11 +1,18 @@
+import hashlib
+import os
+import zipfile
 from fastapi import FastAPI, HTTPException
 from typing import List , Union
 from http import HTTPStatus
+
+from fastapi.responses import FileResponse
 from models import Aluno
 import csv
 
-app = FastAPI()
+CSV_FILE_PATH = "alunos.csv"
+ZIP_FILE_PATH = "alunos.zip"
 
+app = FastAPI()
 
 
 # Carregar dados do arquivo CSV
@@ -56,7 +63,19 @@ def count_entities_csv(file_path: str) -> int:
             return sum(1 for row in reader)
     except FileNotFoundError:
         return 0
-
+#Função para calcular o hash sha256
+def calcular_hash_sha256(file_path: str) -> str:
+    """
+    Calcula o hash SHA256 de um arquivo.
+    """
+    try:
+        with open(file_path, "rb") as file:
+            sha256 = hashlib.sha256()
+            while chunk := file.read(8192):  # Lê o arquivo em blocos de 8KB
+                sha256.update(chunk)
+            return sha256.hexdigest()
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Arquivo CSV não encontrado")
 
 # Create Aluno
 @app.post("/alunos/")
@@ -101,3 +120,32 @@ def excluir_aluno(aluno_id: int, aluno: Aluno):
 @app.get("/alunos/count")
 def contar_alunos():
     return count_entities_csv("alunos.csv")
+
+@app.post("/compactar_csv/")
+def compactar_csv():
+    """
+    Compacta o arquivo CSV em um arquivo ZIP e o retorna.
+    """
+    # Verifica se o arquivo CSV existe
+    if not os.path.exists(CSV_FILE_PATH):
+        return {"error": "Arquivo CSV não encontrado"}
+
+    # Cria o arquivo ZIP
+    with zipfile.ZipFile(ZIP_FILE_PATH, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        zipf.write(CSV_FILE_PATH, arcname=os.path.basename(CSV_FILE_PATH))
+
+    # Retorna o arquivo ZIP
+    return FileResponse(
+        ZIP_FILE_PATH,
+        media_type="application/zip",
+        filename=os.path.basename(ZIP_FILE_PATH)
+    )
+
+#endpoint que retorna o hash sha256 de um arquivo CSV  
+@app.get("/hash_csv/")
+def obter_hash_csv():
+    """
+    Retorna o hash SHA256 do arquivo CSV.
+    """
+    hash_csv = calcular_hash_sha256(CSV_FILE_PATH)
+    return {"hash_sha256": hash_csv}
