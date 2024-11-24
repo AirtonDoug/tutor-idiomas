@@ -1,0 +1,13 @@
+Airton Douglas ficou responsável por:
+
+    - Criar as funções que usam CSV 
+    - Criar o models para as entidades tutor e aluno
+    - Fazer a estrutura do CRUD para o aluno
+    - Modularizar as rotas aluno e tutor usando router do FastAPI
+
+
+Marcos Vinicius ficou responsável por:
+
+    - Criar função de zipar os arquivos CSV
+    - Criar função de retornar o hash
+    - Fazer a estrutura do CRUD para o tutor

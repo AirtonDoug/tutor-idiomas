@@ -4,3 +4,8 @@ id,nome,email,login,senha,nivel,turma_participante,tutor_responsavel,aulas_assis
 3,Carlos Andrade,carlos.andrade@example.com,carlosandrade,senha789,Básico,Turma C,Juliana Melo,2
 4,Vitor Santos,vitsant@gmail.com,vitsant147,12574,Intermediário,Turma B,Joyce Ferreira,9
 5,Marcos Vinicius,marcos@gmail,marcoslp87,123456,intermediario,a,Ricardo,0
+6,Julia Almeida,julia.almeida@example.com,juliaalmeida,senhaabc,Básico,Turma A,Marcos Vinicius,3
+7,Fernando Costa,fernando.costa@example.com,fernandoc,senha789,Intermediário,Turma C,Maria Souza,6
+8,Beatriz Lima,beatriz.lima@example.com,bialima,senha123,Avançado,Turma B,Carlos Silva,12
+9,Rafael Moreira,rafael.moreira@example.com,rafamoreira,senha567,Intermediário,Turma C,Juliana Melo,8
+10,Patrícia Rocha,patricia.rocha@example.com,patrocha,senha234,Básico,Turma A,Joyce Ferreira,4

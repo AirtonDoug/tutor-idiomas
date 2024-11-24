@@ -1,7 +1,7 @@
 import hashlib
 import os
 import zipfile
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from typing import List , Union
 from http import HTTPStatus
 
@@ -12,7 +12,7 @@ import csv
 CSV_FILE_PATH = "tutores.csv"
 ZIP_FILE_PATH = "tutores.zip"
 
-app = FastAPI()
+router = APIRouter()
 
 def load_tutores_from_csv() -> List[Tutor]:
     tutores = []
@@ -21,7 +21,7 @@ def load_tutores_from_csv() -> List[Tutor]:
             reader = csv.DictReader(file)
             for row in reader:
                 tutores.append(Tutor(
-                    id=int(row["id"]),
+                    id=row["id"],
                     nome=row["nome"],
                     email=row["email"],
                     login=row["login"],
@@ -79,7 +79,7 @@ def calcular_hash_sha256(file_path: str) -> str:
         raise HTTPException(status_code=404, detail="Arquivo CSV não encontrado")
 
 
-@app.post("/tutores/")
+@router.post("/tutores/")
 def create_tutor(tutor: Tutor):
     """
     criar e adicionar o novo tutor
@@ -90,12 +90,12 @@ def create_tutor(tutor: Tutor):
     save_tutores_csv(tutores)
     return tutor
 
-@app.get("/tutotes/")
+@router.get("/tutores/")
 def listar_tutores() -> List[Tutor]:
     return tutores
 
 
-@app.put("/tutores/{tutor_id}")
+@router.put("/tutores/{tutor_id}")
 def atualizar_tutor(tutor_id: int, tutor: Tutor):
     """
     Atualizar um tutor passando um ID
@@ -108,7 +108,7 @@ def atualizar_tutor(tutor_id: int, tutor: Tutor):
     raise HTTPException(status_code=404, detail="Tutor não encontrado")
 
 
-@app.delete("/tutores/{tutor_id}")
+@router.delete("/tutores/{tutor_id}")
 def excluir_tutor(tutor_id: int):
     """
     Deletar um tutor passando o ID
@@ -121,15 +121,15 @@ def excluir_tutor(tutor_id: int):
     raise HTTPException(status_code=404, detail="Tutor não encontrado")
 
 
-@app.get("/tutores/count")
-def contar_alunos():
+@router.get("/tutores/count")
+def contar_tutores():
     """
-    retornar a quantidade de entidades do arquivo CSV
+    retornar a quantidade de tutores do arquivo CSV
     """
     return count_entities_csv("tutores.csv")
 
 
-@app.post("/compactar_csv/")
+@router.post("/tutores/compactar_csv")
 def compactar_csv():
     """
     Compacta o arquivo CSV em um arquivo ZIP e o retorna.
@@ -150,7 +150,7 @@ def compactar_csv():
     )
 
  
-@app.get("/hash_csv/")
+@router.get("/tutores/hash_csv")
 def obter_hash_csv():
     """
     Retorna o hash SHA256 do arquivo CSV.
